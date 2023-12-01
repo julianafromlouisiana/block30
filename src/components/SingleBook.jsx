@@ -6,8 +6,9 @@ import { fetchSingleBook } from "../../API";
 
 const SingleBook = () => {
     const { bookId } = useParams();
-    const [bookData, setBookData] = useState('');
+    const [bookData, setBookData] = useState(null);
     const [error, setError] = useState(null);
+    const [isLoggedIn, setIsLoggedIn] =useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -15,17 +16,30 @@ const SingleBook = () => {
                 const result = await fetchSingleBook(bookId);
                 setBookData(result);
             } catch (error) {
-                console.error(error.message);
+                setError(error.message);
             }
         };
         fetchData();
     }, [bookId]);
+    
+    const fakeLogin = () => {
+        setIsLoggedIn(true);
+    };
+
+    const handleCheckout = () => {
+        if (isLoggedIn) {
+            console.log("Checkout successful!");
+        } else {
+            console.log("User not logged in. Redirecting...");
+            fakeLogin();
+        }
+    };
 
     if (error) {
         return <div>Error: {error}</div>
     }
 
-    if (!bookData) {
+    if (bookData === null) {
         return <div>Loading...</div>;
     }
     return (
@@ -33,6 +47,9 @@ const SingleBook = () => {
             <h2>{bookData.title}</h2>
             <p>Author: {bookData.author}</p>
             <p>Genre: {bookData.genre}</p>
+
+            <button onClick={handleCheckout}>Checkout</button>
+            
         </div>
     );
 
