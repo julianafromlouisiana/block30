@@ -1,14 +1,16 @@
 /* TODO - add your code to create a functional React component that renders account details for a logged in user. Fetch the account data from the provided API. You may consider conditionally rendering a message for other users that prompts them to log in or create 
 an account.  */
 
-import React, { useContext, useEffect, useState } from 'react';
-import Authenticate from './Authenticate';
+import React, { useEffect, useState } from 'react';
+import { useAuthenticate } from './Authenticate';
+
 
 
 const Account = () => {
+    const { token } = useAuthenticate();
     const [userData, setUserData] = useState(null);
     const [error, setError] = useState(null);
-    const { token } = useContext(Authenticate);//Get token
+   
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -16,7 +18,7 @@ const Account = () => {
                 const response = await fetch('/api/user/me', {
                     headers: {
                         'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}`,
+                    Authorization: `Bearer ${token}`,
                     },
                 });
 
@@ -28,6 +30,7 @@ const Account = () => {
                 setUserData(data);
             }catch (error) {
                 console.error(error.message);
+                setError('Failed to fetch user data');
             }
 
         };
@@ -41,7 +44,7 @@ const Account = () => {
 
 
     if (error) {
-        return <div>Error: {error}</div>
+        return <div>Error: {error}</div>;
      }
 
      if(!userData) {

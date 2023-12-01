@@ -1,10 +1,13 @@
 /* TODO - add your code to create a functional React component that renders a login form */
 
 import React, { useState } from 'react';
+import { useAuthenticate } from './Authenticate';
+
 
 const LoginForm = () => {
+    const { token, setToken } = useAuthenticate();
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState(null);
+    const [password, setPassword] = useState('');
     const [error, setError] = useState(null);
 
 

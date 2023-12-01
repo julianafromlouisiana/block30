@@ -7,6 +7,8 @@ import Login from './components/Login';
 import Navigations from './components/Navigations';
 import Register from './components/Register';
 import SingleBook from './components/SingleBook';
+import AuthenticateProvider from './components/Authenticate';
+import { Route as RouterRoute } from 'react-router-dom'
 import { Link } from 'react-router-dom';
 import './index.css';
 
@@ -19,14 +21,15 @@ function App() {
   return (
     <>
       <h1><img id='logo-image' src={bookLogo}/>Library App</h1>
+      <AuthenticateProvider>
       <BrowserRouter>
     <Navigations />
     <Routes>
-      <Route path="/register" element={<Register />} />
-      <Route path="/login" element={<Login />} />
-      <Route path="/account" element={<Account />} />
-      <Route path="/books" element={<Books />} />
-      <Route path="/books/:bookid" element={<SingleBook />} />
+      <RouterRoute path="/register" element={<Register />} />
+      <RouterRoute path="/login" element={<Login />} />
+      <RouterRoute path="/account" element={<Account />} />
+      <RouterRoute path="/books" element={<Books />} />
+      <RouterRoute path="/books/:bookId" element={<SingleBook />} />
 
 
 
@@ -37,6 +40,7 @@ function App() {
       <p>Don't forget to set up React Router to navigate between the different views of your single page application!</p> */}
       </Routes>
       </BrowserRouter>
+      </AuthenticateProvider>
     </>
 
   );

@@ -4,7 +4,8 @@ Users should be able to click on an individual book to navigate to the SingleBoo
 
 
 import React, { useEffect, useState } from "react";
-import { fetchAllBooks } from "../assets";
+import { Link } from 'react-router-dom';
+import { fetchAllBooks } from "../../API";
 
 const BookList = () => {
     const [books, setBooks] = useState([]);
@@ -26,14 +27,19 @@ const BookList = () => {
     return (
         <div>
             <h2>All Books</h2>
-            {error && <p>Error: {error}</p>}
+            {error ? (
+                 <p>Error: {error}</p>
+            ) : (
             <ul>
                 {books.map((book) => (
-                    <li key={book.id}>{book.title}</li>
+                    <li key={book.id}>
+                        <Link to={`/books/${book.id}`}>{book.title}</Link>
+                </li>
                 ))}
             </ul>
+            )}
         </div>
-    );
+    )
     };
 
     export default BookList;

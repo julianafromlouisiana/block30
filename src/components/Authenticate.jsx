@@ -1,40 +1,40 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
+
+const AuthenticateContext = React.createContext();
+
+const AuthenticateProvider = ({ children }) => {
+    const [token, setToken] = useState(null)
 
 
-export default function Authenticate({ token }) {
-    const [error, setError] = useState("");
-    const [successMessage, setSuccessMessage] = useState(null);
-    
-    const handleClick = async () => {
-        try {
-            const response = await fetch('/api/reserevations', {
-                method: 'PATCH',
-                headers: {
-                    'Content-Type': 'application/json',
-                    Authorization: `Bearer ${token}`,
-                },
-                body: JSON.stringify({ token: token })
+const updateReservation = async () => {
+    try {
+        const response = await fetch('/api/reservations', {
+            method: "PATCH",
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify({ token }),
         });
 
-
-            if (response.ok) {
-                setSuccessMessage("Successfully updated reservation");
-            } else {
-                setError("Failed to update reservation");
-            }
-        } catch (error) {
-            setError("An error has occured while updating");
+        if (response.ok) {
+            console.log('Successfully Updated Reservation');
+        } else {
+            console.error('Failed to update');
         }
-    };
+    } catch (error) {
+        console.error(error.message);
+    }
+};
 
-    return (
-        <div>
-            {error && <p>Error: {error}</p>}
-            {successMessage && <p>{successMessage}</p>}
+const contextValue = { token, setToken, updateReservation };
 
-            <buton onClick={handleClick}>Update Reservation</buton>
-        </div>
-    );
+return (
+    <AuthenticateContext.Provider value={contextValue}>
+        {children}
+    </AuthenticateContext.Provider>
+);
+};
 
-
-}
+export const useAuthenticate = () => React.useContext(AuthenticateContext);
+export default AuthenticateProvider;
